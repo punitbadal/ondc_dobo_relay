@@ -70,17 +70,10 @@ router.post('/:action', async (req, res) => {
             normalizedData = normalizeFn(message);
         }
 
-        // 8. Push normalized data to your Buyer Backend
+        // 8. Push original ONDC payload to your Buyer Backend for full compatibility
         await push({
             event: action,
-            domain: context.domain,
-            domain_label: domainConfig.label,
-            transaction_id: context.transaction_id,
-            message_id: context.message_id,
-            bpp_id: context.bpp_id,
-            timestamp: context.timestamp,
-            data: normalizedData,
-            error: error || null
+            ...req.body
         });
 
         console.log(`[Callback] ${action} processed successfully for domain ${context.domain}`);
