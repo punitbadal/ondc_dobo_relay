@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  relay:
+    build: .
+    container_name: ondc-relay
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - RELAY_BAP_ID=${RELAY_BAP_ID}
+      - RELAY_CALLBACK_URL=${RELAY_CALLBACK_URL}
+      - ONDC_GATEWAY_URL=${ONDC_GATEWAY_URL}
+      - ONDC_REGISTRY_URL=${ONDC_REGISTRY_URL}
+      - RELAY_SIGNING_PRIVATE_KEY=${RELAY_SIGNING_PRIVATE_KEY}
+      - RELAY_ENCRYPTION_PRIVATE_KEY=${RELAY_ENCRYPTION_PRIVATE_KEY}
+      - APP_BACKEND_WEBHOOK_URL=${APP_BACKEND_WEBHOOK_URL}
+      - APP_BACKEND_WEBHOOK_SECRET=${APP_BACKEND_WEBHOOK_SECRET}
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+    networks:
+      - ondc-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: ondc-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - ondc-network
+
+networks:
+  ondc-network:
+    driver: bridge
+
+volumes:
+  redis_data:
