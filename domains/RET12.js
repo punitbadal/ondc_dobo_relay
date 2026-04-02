@@ -1,3 +1,4 @@
+// domains/RET12.js
 const base = require('./base');
 const { indexTags } = require('../utils/tagHelpers');
 
@@ -11,7 +12,7 @@ module.exports = {
         item.attributes = {
             brand: attrs.brand,
             colour: attrs.colour,
-            colour_name: attrs.colour_name,           // mandatory as per v1.2
+            colour_name: attrs.colour_name,           // mandatory per spec
             size: attrs.size,
             gender: attrs.gender,
             material: attrs.material,
